@@ -26,7 +26,28 @@ module mux_4_1
 
   // Using code for mux_2_1 as an example,
   // write code for 4:1 mux using the "if" statement
-
+    
+  logic sel0;
+  logic sel1;
+  assign sel0 = sel[0];
+  assign sel1 = sel[1];
+  always_comb
+  begin
+    if (sel1)
+	begin
+      if (sel0)
+        y = d3;
+      else
+        y = d2;
+	end
+    else
+    begin	
+      if (sel0)
+        y = d1;
+      else
+        y = d0;
+	end
+  end
 
 endmodule
 
