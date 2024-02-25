@@ -34,6 +34,28 @@ module signed_add_with_saturation
   // When the result does not fit into 4 bits,
   // and the arguments are negative,
   // the sum should be set to the minimum negative number.
+  logic c_out, a_sign, b_sign;
+  assign a_sign = a[3];
+  assign b_sign = b[3];
+  logic [3:0] sum_internal;
+  logic [3:0] max_pos = 4'b0111;
+  logic [3:0] min_neg = 4'b1000;
+  always_comb begin
+    if (a_sign != b_sign) begin
+      c_out = 0;
+      sum_internal = a + b;
+    end
+    else begin
+      sum_internal = a + b;
+      c_out = sum_internal[3] != a_sign;
+      if (c_out && a_sign == 0)
+        sum_internal = max_pos;
+      if (c_out && a_sign == 1)
+        sum_internal = min_neg;
+    end
+  end
+  assign sum = sum_internal;
+  assign overflow = c_out;
 
 
 endmodule

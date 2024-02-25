@@ -34,6 +34,24 @@ module signed_add_with_overflow
   // when the sum (either positive or negative)
   // of two input arguments does not fit into 4 bits.
   // Otherwise the 'overflow' should be set to 0.
+  logic c_out, a_sign, b_sign;
+  assign a_sign = a[3];
+  assign b_sign = b[3];
+  logic [3:0] sum_internal;
+  assign max_pos = 4'b0111;
+  assign min_neg = 4'b1000;
+  always_comb begin
+    if (a_sign != b_sign) begin
+      c_out = 0;
+      sum_internal = a + b;
+    end
+    else begin
+      sum_internal = a + b;
+      c_out = sum_internal[3] != a_sign;
+    end
+  end
+  assign sum = sum_internal;
+  assign overflow = c_out;
 
 
 endmodule
