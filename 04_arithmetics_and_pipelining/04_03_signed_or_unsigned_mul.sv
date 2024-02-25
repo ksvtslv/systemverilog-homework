@@ -52,7 +52,38 @@ module signed_or_unsigned_mul
   input                signed_mul,
   output [2 * n - 1:0] res
 );
-
+logic res_sign;
+logic [2*n-1 : 0] tmp_res;
+logic[n-1 : 0] tmp_a;
+logic[n-1 : 0] tmp_b;
+logic a_sign;
+logic b_sign;
+always_comb begin
+  tmp_a = a;
+  tmp_b = b;
+  a_sign = a[n-1];
+  b_sign = b[n-1];
+  res_sign = 0;
+  if (signed_mul) begin
+    if ((a_sign == 1) & (b_sign == 0)) begin
+      tmp_a = ~tmp_a + 1;
+      res_sign = ~res_sign;
+    end
+    if ((a_sign == 0) & (b_sign== 1)) begin
+      tmp_b = ~tmp_b + 1;
+      res_sign = ~res_sign;
+    end
+    if ((a_sign ==1) & (b_sign == 1)) begin
+      tmp_a = ~tmp_a + 1;
+      tmp_b = ~tmp_b + 1;
+    end
+  end
+  tmp_res = tmp_a * tmp_b;
+  if (res_sign == 1) begin
+    tmp_res = ~tmp_res + 1;
+  end
+end
+assign res = tmp_res;
 endmodule
 
 //----------------------------------------------------------------------------
