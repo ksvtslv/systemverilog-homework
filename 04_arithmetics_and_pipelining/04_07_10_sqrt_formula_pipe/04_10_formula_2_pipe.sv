@@ -41,5 +41,8 @@ module formula_2_pipe
     // FPGA-Systems Magazine :: FSM :: Issue ALFA (state_0)
     // You can download this issue from https://fpga-systems.ru/fsm
 
+    assign res_vld = 1;
+    assign res = 0;
+
 
 endmodule
